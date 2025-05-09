@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  #page{
+    background-color: lightgrey;
+  }
+
+</style>
+<div class="container">
+    <div class="jumbotron"><br>
+        <p class="d-inline-flex gap-1">
+            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+              Add Taks&nbsp;<i class='bx bx-plus-circle'></i>
+            </a>
+          </p>
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="btn btn-success" type="submit" value="ADD">
+              </form>
+            </div>
+          </div>
+        <h1>List of all Tasks</h1>
+        <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Task ID</th>
+                <th scope="col">Task Name</th>
+                <th scope="col">Assigned By</th>
+                <th scope="col">Assigned To</th>
+                <th scope="col">Description</th>
+                <th scope="col">Assigned Date</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Status</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+            {% for item in data %}
+              <tr class="{% if item.status == 'completed' %} table-success {% endif %}">
+                <th scope="row">{{ item.task_id }}</th>
+                    <td>{{ item.task_name }}</td>
+                    <td>{{ item.assigned_by }}</td>
+                    <td>{{ item.assigned_to }}</td>
+                    <td><a href="{% url 'description' id=item.id %}">More info</a></td>
+                    <td>{{ item.assigned_date }}</td>
+                    <td>{{ item.priority }}</td>
+                    <td>{{ item.status }}</td>
+                    <td><a href="{% url 'edit' id=item.id %}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: msFilter"><path d="m18.988 2.012 3 3L19.701 7.3l-3-3zM8 16h3l7.287-7.287-3-3L8 13z"></path><path d="M19 19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .896-2 2v14c0 1.104.897 2 2 2h14a2 2 0 0 0 2-2v-8.668l-2 2V19z"></path></svg></a></td>
+                    <td><a href="{% url 'delete' id=item.id %}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: msFilter"><path d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7H6zm10.618-3L15 2H9L7.382 4H3v2h18V4z"></path></svg></a></td>
+                    {% if item.priority == 'high' %}
+                        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: red;transform: msFilter"><path d="m5.705 3.71-1.41-1.42C1 5.563 1 7.935 1 11h1l1-.063C3 8.009 3 6.396 5.705 3.71zm13.999-1.42-1.408 1.42C21 6.396 21 8.009 21 11l2-.063c0-3.002 0-5.374-3.296-8.647zM12 22a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22zm7-7.414V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.184 4.073 5 6.783 5 10v4.586l-1.707 1.707A.996.996 0 0 0 3 17v1a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-1a.996.996 0 0 0-.293-.707L19 14.586z"></path></svg></td>
+                    {% elif item.priority == 'medium' %}
+                        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: darkorange;transform: msFilter"><path d="M20 3H4a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zm-2.046 4.265-.966.925a.28.28 0 0 0-.106.271v6.801a.28.28 0 0 0 .106.271l.942.926v.204h-4.741v-.204l.977-.948c.097-.096.097-.125.097-.271V9.742l-2.716 6.896h-.368L8.018 9.742v4.622a.644.644 0 0 0 .176.531l1.271 1.541v.203H5.861v-.203l1.271-1.541a.618.618 0 0 0 .164-.531V9.02a.468.468 0 0 0-.152-.395l-1.13-1.36v-.203H9.52l2.71 5.943 2.382-5.943h3.343v.203z"></path></svg></td>
+                    {% elif item.priority == 'low' %}
+                        <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: darkmagenta;transform: msFilter"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><ellipse cx="12" cy="15.5" rx="3" ry="2.5"></ellipse><path d="M10 7c-2.905 0-3.983 2.386-4 3.99l2 .021C8.002 10.804 8.076 9 10 9V7zm4 0v2c1.826 0 1.992 1.537 2 2.007L17 11h1c0-1.608-1.065-4-4-4z"></path></svg></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table><br>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a class="page-link" href="?pg=1">First</a>
+            </li>
+            {% if data.has_previous %}
+              <li class="page-item"><a class="page-link" href="?pg={{ data.previous_page_number}}">{{ data.previous_page_number}}</a></li>
+            {% endif %}
+            <li class="page-item"><a id="{% if data.number %}page{% endif %}" class="page-link" href="?pg={{ data.number }}">{{ data.number }}</a></li>
+            {% if data.has_next %}
+              <li class="page-item"><a class="page-link" href="?pg={{ data.next_page_number }}">{{ data.next_page_number }}</a></li>
+            {% endif %}
+            <li class="page-item">
+              <a class="page-link" href="?pg={{ data.paginator.num_pages }}">Last</a>
+            </li>
+          </ul>
+        </nav>
+    </div>
+</div>
+
+{% endblock %}

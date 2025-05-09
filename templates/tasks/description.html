@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="contanier">
+    <div class="jumbotron">
+        <h1>Description about</h1><br>
+        <h3>{{ item.task_name }}</h3>
+        {% if item %}
+            {{ item.description }}
+        {% endif %}
+        <br><br>
+        <h2>Screenshots:</h2>
+        <div class="card">
+        {% if images %}
+            {% for image in images %}
+                <div class="card-body">
+                <img src="{{ image.image.url }}" class="card-img-top" alt="NA">
+            {% endfor %}
+        {% else %}
+            <p>No Image Display</p>
+        {% endif %}
+            </div>
+          </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="jumbotron">
+        <h1>Dashboard Page</h1>
+        <h4>Welcome {{ user.username }} to your Profile</h4>
+        <h4>Email: {{ user.email }}</h4>
+        <h4>Address: {{ user.usermodel.address }}</h4>
+        <h4>Street: {{ user.usermodel.street }}</h4>
+        <h4>City: {{ user.usermodel.city }}</h4>
+        <h4>Zipcode: {{ user.usermodel.zipcode }}</h4>
+        {% if user.usermodel.userimg %}
+            Img: <img src="{{ user.usermodel.userimg.url }}" alt="Profile img" width="150px" height="150px" ><br><br>
+        {% else %}
+            <p>NO Image</p>
+        {% endif %}
+        <a class="btn btn-danger" href="{% url 'update' %}">Update</a>
+    </div>
+</div>
+{% endblock %}
